@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+/* Custom Styling for NicheLink - Distinct, Professional, High-Contrast & Sleek */
+
+:root {
+  /* Color System */
+  --nl-bg-base: #060813;
+  --nl-bg-surface: #0a0e1a;
+  --nl-bg-card: #0f162a;
+  --nl-bg-card-hover: #151e38;
+  
+  --nl-accent-primary: #10b981; /* Emerald green (active/active state) */
+  --nl-accent-primary-hover: #059669;
+  --nl-accent-primary-glow: rgba(16, 185, 129, 0.15);
+  
+  --nl-accent-secondary: #0ea5e9; /* Sky blue (actions/links) */
+  --nl-accent-secondary-hover: #0284c7;
+  
+  --nl-accent-tertiary: #f43f5e; /* Coral rose (DMs/notifications/badges) */
+  
+  --nl-border-color: rgba(255, 255, 255, 0.06);
+  --nl-border-hover: rgba(16, 185, 129, 0.25);
+  
+  --nl-text-primary: #f8fafc;
+  --nl-text-secondary: #94a3b8;
+  --nl-text-muted: #475569;
+  
+  --nl-success: #10b981;
+  --nl-warning: #f59e0b;
+  --nl-danger: #ef4444;
+  
+  --nl-badge-pro: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --nl-gradient-brand: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+  --nl-gradient-dark: linear-gradient(180deg, #060813 0%, #030408 100%);
+  
+  --nl-focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.3);
+  
+  /* Radii & Shadows */
+  --nl-radius-sm: 6px;
+  --nl-radius-md: 12px;
+  --nl-radius-lg: 20px;
+  
+  --nl-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --nl-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --nl-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
+  
+  --nl-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --nl-transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--nl-gradient-dark) !important;
+  color: var(--nl-text-primary) !important;
+  min-height: 100vh;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+/* Accessibility Focus States */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: none;
+  box-shadow: var(--nl-focus-ring) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060813;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nl-accent-primary);
+}
+
+/* Clean Custom Form Inputs */
+.nl-input {
+  background: rgba(10, 14, 26, 0.8) !important;
+  border: 1px solid var(--nl-border-color) !important;
+  color: var(--nl-text-primary) !important;
+  border-radius: var(--nl-radius-md) !important;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  transition: var(--nl-transition-smooth);
+}
+.nl-input::placeholder {
+  color: var(--nl-text-muted) !important;
+}
+.nl-input:focus {
+  background: var(--nl-bg-surface) !important;
+  border-color: var(--nl-accent-primary) !important;
+  box-shadow: var(--nl-focus-ring) !important;
+}
+
+/* Custom Typography & Badges */
+.nl-badge {
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--nl-accent-primary);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nl-badge-secondary {
+  background: rgba(14, 165, 233, 0.08);
+  color: var(--nl-accent-secondary);
+  border: 1px solid rgba(14, 165, 233, 0.15);
+}
+
+.nl-badge-tertiary {
+  background: rgba(244, 63, 94, 0.08);
+  color: var(--nl-accent-tertiary);
+  border: 1px solid rgba(244, 63, 94, 0.15);
+}
+
+.nl-badge-pro {
+  background: var(--nl-badge-pro);
+  color: #000000;
+  font-weight: 700;
+  border: none;
+  font-size: 0.7rem;
+}
+
+/* Beautiful Premium NicheLink Cards (No excessive white rounded containers) */
+.nl-card {
+  background: var(--nl-bg-card);
+  border: 1px solid var(--nl-border-color);
+  border-radius: var(--nl-radius-md);
+  transition: var(--nl-transition-smooth);
+  box-shadow: var(--nl-shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+.nl-card:hover {
+  background: var(--nl-bg-card-hover);
+  border-color: var(--nl-border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--nl-shadow-lg);
+}
+
+.nl-card-flat {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--nl-border-color);
+  border-radius: var(--nl-radius-md);
+  padding: 16px;
+}
+
+/* Distinct Premium Button Styles */
+.nl-btn {
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--nl-radius-md);
+  transition: var(--nl-transition-smooth);
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+}
+.nl-btn-primary {
+  background: var(--nl-accent-primary);
+  color: #060813 !important;
+}
+.nl-btn-primary:hover:not(:disabled) {
+  background: var(--nl-accent-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px var(--nl-accent-primary-glow);
+}
+.nl-btn-secondary {
+  background: var(--nl-accent-secondary);
+  color: #ffffff !important;
+}
+.nl-btn-secondary:hover:not(:disabled) {
+  background: var(--nl-accent-secondary-hover);
+  transform: translateY(-1px);
+}
+.nl-btn-outline {
+  background: transparent;
+  border-color: var(--nl-border-color);
+  color: var(--nl-text-primary);
+}
+.nl-btn-outline:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--nl-accent-primary);
+  color: #ffffff;
+}
+.nl-btn-ghost {
+  background: transparent;
+  color: var(--nl-text-secondary);
+}
+.nl-btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--nl-text-primary);
+}
+
+/* Layout Custom Styles */
+.nl-navbar {
+  background: rgba(6, 8, 19, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--nl-border-color);
+}
+
+/* Nav Rail Styling */
+.nl-nav-rail {
+  position: sticky;
+  background: rgba(6, 8, 19, 0.5);
+  border-right: 1px solid var(--nl-border-color);
+  height: calc(100vh - 70px);
+  top: 70px;
+}
+
+.nl-nav-rail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 6px;
+  color: var(--nl-text-secondary);
+  text-decoration: none;
+  border-radius: var(--nl-radius-md);
+  font-size: 0.72rem;
+  font-weight: 500;
+  transition: var(--nl-transition-fast);
+  margin-bottom: 8px;
+}
+.nl-nav-rail-item span:first-child {
+  font-size: 1.25rem;
+  transition: var(--nl-transition-fast);
+}
+.nl-nav-rail-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--nl-text-primary);
+}
+.nl-nav-rail-item.active {
+  color: var(--nl-accent-primary);
+  background: rgba(16, 185, 129, 0.05);
+  font-weight: 600;
+}
+.nl-nav-rail-item.active span:first-child {
+  transform: scale(1.1);
+}
+
+/* Chat styles */
+.nl-chat-bubble-sent {
+  background: var(--nl-accent-primary);
+  color: #060813;
+  font-weight: 500;
+  border-radius: 16px 16px 2px 16px;
+  padding: 10px 16px;
+  max-width: 75%;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.1);
+}
+.nl-chat-bubble-received {
+  background: var(--nl-bg-card);
+  color: var(--nl-text-primary);
+  border-radius: 16px 16px 16px 2px;
+  padding: 10px 16px;
+  max-width: 75%;
+  border: 1px solid var(--nl-border-color);
+}
+
+/* Micro-animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nl-animate-fade-in {
+  animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Custom visual utilities */
+.text-line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.text-line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.hover-text-primary:hover {
+  color: var(--nl-accent-primary) !important;
+}
+.hover-opacity:hover {
+  opacity: 0.85;
+}
+
