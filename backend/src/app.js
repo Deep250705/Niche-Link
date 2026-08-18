@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+// Load environment variables immediately to resolve ES Module hoisting initialization order
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
