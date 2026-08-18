@@ -71,49 +71,46 @@ const Layout = ({ children }) => {
       {/* Main Layout Area */}
       <div className="container-fluid flex-grow-1 px-0">
         <div className="d-flex">
-          {/* Sidebar Navigation Rail - Desktop View Only */}
+          {/* Sidebar Navigation - Desktop View Only */}
           {isAuthenticated && (
-            <nav className="d-none d-md-flex flex-column align-items-center py-4 px-2 position-sticky nl-nav-rail" style={{ width: '88px', zIndex: 10 }}>
-              <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 ${isActive ? 'active' : ''}`} to="/" end>
-                <span>🏠</span>
-                <span>Home</span>
+            <nav className="d-none d-md-flex flex-column py-4 px-3 position-sticky nl-sidebar" style={{ zIndex: 10 }}>
+              <div className="nl-sidebar-category">Main Feed</div>
+              
+              <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/" end>
+                <span>🏠</span> Home
               </NavLink>
               
-              <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 ${isActive ? 'active' : ''}`} to="/dashboard">
-                <span>📊</span>
-                <span>Dashboard</span>
+              <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/dashboard">
+                <span>📊</span> Dashboard
               </NavLink>
 
-              <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 ${isActive ? 'active' : ''}`} to="/communities">
-                <span>👥</span>
-                <span>Tribes</span>
+              <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/communities">
+                <span>👥</span> Tribes
               </NavLink>
 
-              <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 ${isActive ? 'active' : ''}`} to="/messages">
-                <span>💬</span>
-                <span>DMs</span>
+              <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/messages">
+                <span>💬</span> Chat DMs
               </NavLink>
 
-              <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 ${isActive ? 'active' : ''}`} to="/projects">
-                <span>💼</span>
-                <span>Projects</span>
+              <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/projects">
+                <span>💼</span> Projects
               </NavLink>
 
-              <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 ${isActive ? 'active' : ''}`} to="/notifications">
-                <span>🔔</span>
-                <span>Alerts</span>
+              <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/notifications">
+                <span>🔔</span> Notifications
               </NavLink>
 
-              <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 ${isActive ? 'active' : ''}`} to="/pricing">
-                <span>💎</span>
-                <span>Pricing</span>
+              <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/pricing">
+                <span>💎</span> Pricing
               </NavLink>
 
               {isAdmin && (
-                <NavLink className={({ isActive }) => `nl-nav-rail-item w-100 mt-4 ${isActive ? 'active' : ''}`} to="/admin">
-                  <span>⚙️</span>
-                  <span>Mod</span>
-                </NavLink>
+                <>
+                  <div className="nl-sidebar-category mt-4">Admin Tools</div>
+                  <NavLink className={({ isActive }) => `nl-sidebar-link ${isActive ? 'active' : ''}`} to="/admin">
+                    <span>⚙️</span> Moderator Panel
+                  </NavLink>
+                </>
               )}
             </nav>
           )}

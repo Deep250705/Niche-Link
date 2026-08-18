@@ -1,42 +1,47 @@
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 
-// Initialize Razorpay SDK instance
-const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder';
-const keySecret = process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret';
-
-export const razorpay = new Razorpay({
-  key_id: keyId,
-  key_secret: keySecret
-});
+// Helper function to load configuration dynamically to prevent ES Module hoisting order issues with dotenv
+const getRazorpay = () => {
+  const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder';
+  const keySecret = process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret';
+  return {
+    keyId,
+    keySecret,
+    client: new Razorpay({
+      key_id: keyId,
+      key_secret: keySecret
+    })
+  };
+};
 
 /**
- * Creates a Razorpay Subscription
- * @param {string} planId 
+ * Creates a Razorpay Order (no Plan ID needed)
+ * @param {number} amount 
  * @returns {Promise<object>}
  */
-export const createRazorpaySubscription = async (planId) => {
+export const createRazorpayOrder = async (amount) => {
   try {
+    const { keyId, keySecret, client } = getRazorpay();
+
     // If using placeholder keys, return a mock response for smooth test running
     if (keyId.includes('placeholder') || keySecret.includes('placeholder')) {
       return {
-        id: `sub_${Math.random().toString(36).substring(7)}`,
+        id: `order_mock_${Math.random().toString(36).substring(7)}`,
         status: 'created',
-        plan_id: planId,
-        current_start: Math.floor(Date.now() / 1000),
-        current_end: Math.floor((Date.now() + 30 * 24 * 60 * 60 * 1000) / 1000)
+        amount,
+        currency: 'INR'
       };
     }
 
-    const sub = await razorpay.subscriptions.create({
-      plan_id: planId,
-      customer_notify: 1,
-      total_count: 12 // 1 year of monthly recurrences
+    const order = await client.orders.create({
+      amount, // in paise (e.g., 149900)
+      currency: 'INR'
     });
-    return sub;
+    return order;
   } catch (error) {
-    console.error('Razorpay Create Subscription Error:', error);
-    throw new Error(error.description || 'Razorpay subscription creation failed.');
+    console.error('Razorpay Create Order Error:', error);
+    throw new Error(error.description || 'Razorpay order creation failed.');
   }
 };
 
@@ -47,6 +52,8 @@ export const createRazorpaySubscription = async (planId) => {
  */
 export const cancelRazorpaySubscription = async (subscriptionId) => {
   try {
+    const { keyId, keySecret, client } = getRazorpay();
+
     if (keyId.includes('placeholder') || keySecret.includes('placeholder') || subscriptionId.startsWith('sub_mock')) {
       return {
         id: subscriptionId,
@@ -54,7 +61,7 @@ export const cancelRazorpaySubscription = async (subscriptionId) => {
       };
     }
 
-    const sub = await razorpay.subscriptions.cancel(subscriptionId, {
+    const sub = await client.subscriptions.cancel(subscriptionId, {
       cancel_at_cycle_end: 0 // cancel immediately for trial/mock runs
     });
     return sub;

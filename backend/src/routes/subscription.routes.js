@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { requireAuth } from '../middleware/authz.middleware.js';
 import Subscription from '../models/Subscription.js';
 import User from '../models/User.js';
-import { createRazorpaySubscription, cancelRazorpaySubscription, verifyWebhookSignature } from '../services/razorpayService.js';
+import { createRazorpayOrder, cancelRazorpaySubscription, verifyWebhookSignature } from '../services/razorpayService.js';
 import { isProActive } from '../services/subscriptionService.js';
 
 const router = express.Router();
@@ -45,14 +45,14 @@ router.post('/create', requireAuth, async (req, res, next) => {
       });
     }
 
-    const planId = process.env.RAZORPAY_PLAN_ID || 'plan_placeholder123';
+    const amount = 149900; // ₹1499 in paise
 
-    // 2. Call Razorpay API to initialize subscription
-    const razorpaySub = await createRazorpaySubscription(planId);
+    // 2. Call Razorpay API to initialize order
+    const razorpayOrder = await createRazorpayOrder(amount);
 
     // 3. Upsert subscription details in DB in pending/created state
-    const startDate = new Date(razorpaySub.start_at * 1000 || Date.now());
-    const endDate = new Date(razorpaySub.end_at * 1000 || (Date.now() + 30 * 24 * 60 * 60 * 1000));
+    const startDate = new Date();
+    const endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days validation
 
     let subscription = await Subscription.findOne({ user: req.user._id });
     if (!subscription) {
@@ -60,8 +60,8 @@ router.post('/create', requireAuth, async (req, res, next) => {
         user: req.user._id,
         plan: 'Pro',
         provider: 'razorpay',
-        providerCustomerId: razorpaySub.customer_id || `cus_mock_${Math.random().toString(36).substring(7)}`,
-        providerSubscriptionId: razorpaySub.id,
+        providerCustomerId: `cus_mock_${Math.random().toString(36).substring(7)}`,
+        providerSubscriptionId: razorpayOrder.id,
         status: 'pending',
         startDate,
         endDate,
@@ -71,7 +71,7 @@ router.post('/create', requireAuth, async (req, res, next) => {
     } else {
       subscription.plan = 'Pro';
       subscription.provider = 'razorpay';
-      subscription.providerSubscriptionId = razorpaySub.id;
+      subscription.providerSubscriptionId = razorpayOrder.id;
       subscription.status = 'pending';
       subscription.startDate = startDate;
       subscription.endDate = endDate;
@@ -84,8 +84,9 @@ router.post('/create', requireAuth, async (req, res, next) => {
     res.status(201).json({
       success: true,
       keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-      subscriptionId: razorpaySub.id,
-      amount: 1500, // INR 15.00 mock
+      orderId: razorpayOrder.id,
+      subscriptionId: razorpayOrder.id, // Fallback compatibility
+      amount,
       currency: 'INR'
     });
   } catch (error) {
@@ -96,9 +97,12 @@ router.post('/create', requireAuth, async (req, res, next) => {
 // POST /api/subscriptions/verify
 router.post('/verify', requireAuth, async (req, res, next) => {
   try {
-    const { razorpay_payment_id, razorpay_subscription_id, razorpay_signature } = req.body;
+    const { razorpay_payment_id, razorpay_order_id, razorpay_subscription_id, razorpay_signature } = req.body;
 
-    if (!razorpay_payment_id || !razorpay_subscription_id || !razorpay_signature) {
+    const paymentId = razorpay_payment_id;
+    const orderOrSubId = razorpay_order_id || razorpay_subscription_id;
+
+    if (!paymentId || !orderOrSubId || !razorpay_signature) {
       return res.status(400).json({
         success: false,
         message: 'Payment credentials verification fields missing.'
@@ -107,7 +111,10 @@ router.post('/verify', requireAuth, async (req, res, next) => {
 
     // Verify signature
     const secret = process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret';
-    const payload = `${razorpay_payment_id}|${razorpay_subscription_id}`;
+    const payload = razorpay_order_id 
+      ? `${razorpay_order_id}|${paymentId}`
+      : `${paymentId}|${razorpay_subscription_id}`;
+
     const expectedSignature = crypto
       .createHmac('sha256', secret)
       .update(payload)
@@ -124,8 +131,8 @@ router.post('/verify', requireAuth, async (req, res, next) => {
       });
     }
 
-    // Locate subscription
-    const subscription = await Subscription.findOne({ providerSubscriptionId: razorpay_subscription_id });
+    // Locate subscription using either order ID or subscription ID
+    const subscription = await Subscription.findOne({ providerSubscriptionId: orderOrSubId });
     if (!subscription) {
       return res.status(404).json({
         success: false,

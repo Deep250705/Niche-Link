@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import Avatar from '../components/Avatar';
 
 const Home = () => {
+  const { isAuthenticated } = useAuth();
   const [tribes, setTribes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -34,8 +36,17 @@ const Home = () => {
             NicheLink brings together remote developers, creators, and engineers into focused, value-driven micro-communities. Share knowledge, discover collaborative projects, and build real professional relationships.
           </p>
           <div className="d-flex justify-content-center gap-3">
-            <Link to="/register" className="btn nl-btn nl-btn-primary px-4 py-2.5">Get Started</Link>
-            <Link to="/pricing" className="btn nl-btn nl-btn-outline px-4 py-2.5">View Pricing</Link>
+            {isAuthenticated ? (
+              <>
+                <Link to="/dashboard" className="btn nl-btn nl-btn-primary px-4 py-2.5">Go to Dashboard</Link>
+                <Link to="/communities" className="btn nl-btn nl-btn-outline px-4 py-2.5">Explore Tribes</Link>
+              </>
+            ) : (
+              <>
+                <Link to="/register" className="btn nl-btn nl-btn-primary px-4 py-2.5">Get Started</Link>
+                <Link to="/pricing" className="btn nl-btn nl-btn-outline px-4 py-2.5">View Pricing</Link>
+              </>
+            )}
           </div>
         </div>
       </div>

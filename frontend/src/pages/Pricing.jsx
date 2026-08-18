@@ -16,17 +16,18 @@ const Pricing = () => {
     }
     try {
       const res = await api.post('/subscriptions/create', { planName: 'Pro' });
-      const { keyId, subscriptionId } = res.data;
+      const { keyId, orderId, subscriptionId } = res.data;
 
       const options = {
         key: keyId,
-        subscription_id: subscriptionId,
+        order_id: orderId || subscriptionId,
         name: 'NicheLink',
         description: 'Monthly Pro Membership Subscription',
         handler: async (response) => {
           try {
             const verifyRes = await api.post('/subscriptions/verify', {
               razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
               razorpay_subscription_id: response.razorpay_subscription_id,
               razorpay_signature: response.razorpay_signature
             });
@@ -103,7 +104,7 @@ const Pricing = () => {
             <span className="position-absolute top-0 start-50 translate-middle badge nl-badge-pro text-uppercase px-3 py-1.5 rounded-pill" style={{ fontSize: '0.65rem' }}>Most Popular</span>
             <div>
               <h3 className="h6 text-uppercase fw-bold mb-3 mt-1" style={{ color: 'var(--nl-accent-primary)' }}>Pro Member</h3>
-              <h2 className="display-4 fw-extrabold text-white my-3">$15<span className="fs-6 text-secondary">/mo</span></h2>
+              <h2 className="display-4 fw-extrabold text-white my-3">₹1,499<span className="fs-6 text-secondary">/mo</span></h2>
               <p className="text-secondary small mb-4">Complete communication, creation, and collaboration suite.</p>
               <ul className="list-unstyled text-start text-secondary small mb-5">
                 <li className="mb-2.5 text-white">✓ Post & comment in all tribes</li>

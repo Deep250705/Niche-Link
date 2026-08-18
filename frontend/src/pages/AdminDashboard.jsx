@@ -267,7 +267,7 @@ const AdminDashboard = () => {
                 <div className="card bg-dark border-secondary p-4 rounded text-center">
                   <span className="text-muted small text-uppercase">Monthly Recurrent Revenue</span>
                   <h2 className="text-success mt-2 mb-0">
-                    ${(metrics ? metrics.subscriptions.active : users.filter(u => u.role === 'ProMember').length) * 15}
+                    ₹{(metrics ? metrics.subscriptions.active : users.filter(u => u.role === 'ProMember').length) * 1499}
                   </h2>
                 </div>
               </div>
