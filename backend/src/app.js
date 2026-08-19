@@ -72,8 +72,14 @@ app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
     console.log('[CORS Debug] Request Origin:', origin);
-    console.log('[CORS Debug] Allowed Origins:', allowedOrigins);
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.some(o => origin.startsWith(o))) {
+    
+    // Check if origin matches allowed list, ends with vercel.app, or starts with any of our config origins
+    const isAllowed = 
+      allowedOrigins.indexOf(origin) !== -1 || 
+      allowedOrigins.some(o => origin.startsWith(o)) ||
+      /\.vercel\.app$/.test(origin);
+
+    if (isAllowed) {
       return callback(null, true);
     }
     console.warn('[CORS Debug] Blocked Origin:', origin);
